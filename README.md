@@ -1,0 +1,2 @@
+# typtech.de
+My Website
