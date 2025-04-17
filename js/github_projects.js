@@ -1,7 +1,8 @@
 // GitHub API integration with authentication
 async function fetchGitHubProjects() {
   try {
-    const username = "TypTech"; // Replace with your GitHub username
+    // Get username from config or use default
+    const username = window.githubConfig?.username || "TypTech";
     
     // API options
     const options = {
