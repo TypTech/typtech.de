@@ -71,6 +71,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 
 .logo {
@@ -82,12 +83,17 @@ body {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    position: absolute;
+    left: 0;
 }
 
 .nav-links {
     display: flex;
     gap: 2rem;
     list-style: none;
+    margin: 0 auto;
+    justify-content: center;
+    width: 100%;
 }
 
 .nav-links a {
@@ -121,6 +127,43 @@ body {
     color: var(--text-primary);
     font-size: 1.5rem;
     cursor: pointer;
+}
+
+.github-link {
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: center;
+}
+
+.view-github {
+    margin-left: 8px;
+}
+
+.github-link a {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 8px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+    text-decoration: none;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+.github-link a:hover {
+    background: rgba(58, 134, 255, 0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(58, 134, 255, 0.2);
+    border-color: rgba(58, 134, 255, 0.3);
+    color: var(--primary-color);
+}
+
+.github-link i {
+    color: var(--primary-color);
+    font-size: 1.2rem;
 }
 
 /* Hero section with video */
@@ -688,6 +731,29 @@ footer {
     .section {
         padding: 80px 0;
     }
+    
+    .logo {
+        position: static;
+    }
+    
+    .github-link {
+        position: static;
+        margin-left: auto;
+    }
+    
+    .nav-links {
+        width: auto;
+        margin: 0;
+    }
+    
+    .github-link a {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .github-link i {
+        font-size: 1rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -705,6 +771,8 @@ footer {
         gap: 2rem;
         transition: var(--transition);
         z-index: 101;
+        margin: 0;
+        padding: 2rem;
     }
 
     .nav-links.active {
@@ -714,6 +782,22 @@ footer {
     .mobile-menu-btn {
         display: block;
         z-index: 102;
+        order: 3;
+    }
+    
+    .github-link {
+        margin-right: 1em;
+        order: 2;
+    }
+    
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .logo {
+        order: 1;
     }
 
     .title {
@@ -761,6 +845,21 @@ footer {
     .contact-form {
         padding: 1.5rem;
     }
+
+    .view-github {
+        display: none;
+    }
+    
+    .github-link a {
+        padding: 8px;
+        border-radius: 50%;
+        aspect-ratio: 1/1;
+        justify-content: center;
+    }
+    
+    .github-link i {
+        margin-right: 0;
+    }
 }
 
 @media (min-width: 768px) {
@@ -783,5 +882,86 @@ footer {
     
     .projects-count-2 {
         grid-template-columns: repeat(2, 280px);
+    }
+}
+
+/* Skills Section */
+.skills-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.skill-category {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(5px);
+    transition: var(--transition);
+}
+
+.skill-category:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(58, 134, 255, 0.2);
+    border-color: rgba(58, 134, 255, 0.2);
+}
+
+.skill-category h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.skill-category h3::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--primary-gradient);
+    border-radius: 3px;
+}
+
+.skill-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 20px;
+}
+
+.skill-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+}
+
+.skill-item i {
+    font-size: 2.2rem;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition: var(--transition);
+}
+
+.skill-item:hover i {
+    transform: scale(1.2);
+}
+
+.skill-item span {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Responsive adjustments for skills section */
+@media (max-width: 768px) {
+    .skills-container {
+        grid-template-columns: 1fr;
     }
 }
