@@ -263,10 +263,17 @@ body {
 }
 
 /* Projects section with modern cards */
-.projects-grid {
+#projects-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.projects-inner {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 40px;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    max-width: 100%;
 }
 
 .project-card {
@@ -280,6 +287,8 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    width: 280px;
 }
 
 .project-card:hover {
@@ -303,10 +312,11 @@ body {
 }
 
 .project-card h3 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     margin-bottom: 1rem;
     position: relative;
     display: inline-block;
+    word-break: break-word;
 }
 
 .project-card h3::after {
@@ -714,7 +724,7 @@ footer {
         font-size: 2rem;
     }
 
-    .projects-grid {
+    .projects-inner {
         grid-template-columns: 1fr;
     }
 
@@ -750,5 +760,28 @@ footer {
 
     .contact-form {
         padding: 1.5rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .projects-inner {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1200px) {
+    .projects-inner {
+        grid-template-columns: repeat(4, 280px);
+        justify-content: center;
+        max-width: 1200px;
+    }
+    
+    /* Fixed width columns for all counts */
+    .projects-count-3 {
+        grid-template-columns: repeat(3, 280px);
+    }
+    
+    .projects-count-2 {
+        grid-template-columns: repeat(2, 280px);
     }
 }

@@ -3,6 +3,8 @@ async function fetchGitHubProjects() {
   try {
     // Get username from config or use default
     const username = window.githubConfig?.username || "TypTech";
+    // Get project count from config or use default
+    const projectCount = window.githubConfig?.projectCount || 3;
     
     // API options
     const options = {
@@ -17,7 +19,7 @@ async function fetchGitHubProjects() {
     }
 
     const response = await fetch(
-      `https://api.github.com/users/${username}/repos?sort=updated&direction=desc&per_page=3`,
+      `https://api.github.com/users/${username}/repos?sort=updated&direction=desc&per_page=${projectCount}`,
       options
     );
 
@@ -50,6 +52,11 @@ async function fetchGitHubProjects() {
 `;
       return;
     }
+
+    // Create the inner container with the appropriate class
+    const innerContainer = document.createElement("div");
+    innerContainer.className = `projects-inner projects-count-${filteredRepos.length}`;
+    projectsContainer.appendChild(innerContainer);
 
     filteredRepos.forEach((repo, index) => {
       const delayClass = `delay-${index + 1}`;
@@ -96,7 +103,7 @@ async function fetchGitHubProjects() {
     </div>
 `;
 
-      projectsContainer.appendChild(projectCard);
+      innerContainer.appendChild(projectCard);
     });
 
     // Trigger animations
