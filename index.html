@@ -27,8 +27,8 @@
             <ul class="nav-links" id="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#projects">Projects</a></li>
-                <li><a href="#skills">Skills</a></li>
                 <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <div class="github-link">
@@ -48,7 +48,7 @@
         <div class="hero-overlay"></div>
         <div class="container">
             <div class="hero-content">
-                <h1 class="title fade-in">TypTech</h1>
+                <h1 class="title title-decoding" id="matrix-title">TypTech</h1>
                 <p class="subtitle fade-in delay-1">Pioneering innovation through cutting-edge technology solutions for
                     the modern world.</p>
                 <a href="#projects" class="cta-btn fade-in delay-2">Explore Our Work <i
@@ -319,6 +319,8 @@
             </div>
         </section>
 
+        <div class="gradient-divider"></div>
+
         <!-- Footer -->
         <footer>
             <div class="container">
@@ -382,6 +384,113 @@
                 navLinks.classList.remove('active');
                 mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
             });
+        });
+
+        // Matrix text decoder effect
+        document.addEventListener('DOMContentLoaded', () => {
+            const title = document.getElementById('matrix-title');
+            const finalText = title.textContent;
+            const titleLength = finalText.length;
+            
+            // Clear original text and prepare for animation
+            title.innerHTML = '';
+            
+            // Create spans for each character
+            for (let i = 0; i < titleLength; i++) {
+                const span = document.createElement('span');
+                span.textContent = getRandomChar();
+                title.appendChild(span);
+            }
+            
+            const spans = title.querySelectorAll('span');
+            
+            // Faster animation for 2-3 second total time
+            startFastMatrixAnimation();
+            
+            // Function for faster matrix animation
+            function startFastMatrixAnimation() {
+                // Add initial decoding effect to all characters
+                spans.forEach(span => span.classList.add('decoding'));
+                
+                // Shuffle all characters rapidly a few times
+                shuffleAllFast(3);
+                
+                // Rapidly decode each character
+                setTimeout(() => {
+                    // Faster sequential decoding
+                    for (let i = 0; i < titleLength; i++) {
+                        setTimeout(() => {
+                            // Reveal the actual character
+                            spans[i].textContent = finalText[i];
+                            spans[i].classList.remove('decoding');
+                            spans[i].classList.add('decoded');
+                        }, i * 150); // 150ms per character = ~1s for full word
+                    }
+                }, 600); // Start decoding after initial shuffle
+                
+                // Make sure final state shows full word
+                setTimeout(() => {
+                    // Ensure all characters are properly revealed
+                    for (let i = 0; i < titleLength; i++) {
+                        spans[i].textContent = finalText[i];
+                        spans[i].classList.remove('decoding');
+                        spans[i].classList.add('decoded');
+                    }
+                }, 2500); // Force completion after 2.5s
+            }
+            
+            // Faster shuffle for all characters
+            function shuffleAllFast(times) {
+                let count = 0;
+                
+                const shuffleInterval = setInterval(() => {
+                    // Shuffle all characters
+                    spans.forEach(span => {
+                        span.textContent = getRandomChar();
+                    });
+                    
+                    count++;
+                    if (count >= times) {
+                        clearInterval(shuffleInterval);
+                    }
+                }, 150); // Faster shuffle interval
+            }
+            
+            // Reset and replay animation when scrolling back into view
+            const titleObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !title.classList.contains('animating')) {
+                        resetMatrixAnimation();
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            titleObserver.observe(title);
+            
+            // Function to reset and replay the animation
+            function resetMatrixAnimation() {
+                title.classList.add('animating');
+                
+                // Reset all characters to random
+                spans.forEach(span => {
+                    span.textContent = getRandomChar();
+                    span.classList.remove('decoded', 'decoding');
+                });
+                
+                // Restart the faster animation
+                startFastMatrixAnimation();
+                
+                // Remove animating class after animation completes
+                setTimeout(() => {
+                    title.classList.remove('animating');
+                }, 2800);
+            }
+            
+            // Helper function to get random character
+            function getRandomChar() {
+                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()";
+                return chars.charAt(Math.floor(Math.random() * chars.length));
+            }
         });
 
         // Navbar scroll effect

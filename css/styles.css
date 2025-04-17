@@ -213,6 +213,54 @@ body {
     text-shadow: 0 0 30px rgba(58, 134, 255, 0.3);
 }
 
+/* Matrix text decoder animation */
+.title-decoding {
+    display: inline-block;
+    position: relative;
+}
+
+.title-decoding span {
+    display: inline-block;
+    color: rgba(58, 134, 255, 0.8); /* Primary blue instead of green */
+    text-shadow: 0 0 8px rgba(58, 134, 255, 0.7);
+    transition: all 0.3s;
+}
+
+.title-decoding span.decoded {
+    color: transparent;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(58, 134, 255, 0.5);
+    animation: pulse-glow 2s infinite alternate;
+}
+
+.title-decoding span.decoding {
+    animation: character-change 0.05s linear infinite;
+    color: #ffffff;
+    text-shadow: 0 0 12px rgba(58, 134, 255, 1);
+}
+
+@keyframes character-change {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse-glow {
+    from {
+        text-shadow: 0 0 15px rgba(58, 134, 255, 0.5);
+    }
+    to {
+        text-shadow: 0 0 25px rgba(58, 134, 255, 0.8), 0 0 30px rgba(58, 134, 255, 0.6);
+    }
+}
+
 .subtitle {
     font-size: clamp(1.1rem, 3vw, 1.5rem);
     font-weight: 400;
