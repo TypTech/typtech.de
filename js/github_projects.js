@@ -18,6 +18,55 @@ async function fetchGitHubProjects() {
       options.headers.Authorization = `token ${window.githubConfig.apiToken}`;
     }
 
+    // First, fetch all repos to count them
+    const allReposResponse = await fetch(
+      `https://api.github.com/users/${username}/repos?per_page=100`,
+      options
+    );
+
+    if (!allReposResponse.ok) {
+      throw new Error(
+        `GitHub API error: ${allReposResponse.status} - ${await allReposResponse.text()}`
+      );
+    }
+
+    const allRepos = await allReposResponse.json();
+    const totalProjects = allRepos.filter(repo => !repo.fork).length;
+    
+    // Calculate total stars and forks
+    let totalStars = 0;
+    let totalForks = 0;
+    const languages = new Set();
+    
+    allRepos.forEach(repo => {
+      if (!repo.fork) {
+        totalStars += repo.stargazers_count;
+        totalForks += repo.forks_count;
+        if (repo.language) {
+          languages.add(repo.language);
+        }
+      }
+    });
+    
+    // Update the projects count in the About section
+    const projectsCountElement = document.getElementById('projects-count');
+    if (projectsCountElement) {
+      projectsCountElement.textContent = totalProjects;
+    }
+    
+    // Update stars count
+    const starsCountElement = document.getElementById('stars-count');
+    if (starsCountElement) {
+      starsCountElement.textContent = totalStars;
+    }
+    
+    // Update languages count
+    const languagesCountElement = document.getElementById('languages-count');
+    if (languagesCountElement) {
+      languagesCountElement.textContent = languages.size;
+    }
+
+    // Now fetch the display repos
     const response = await fetch(
       `https://api.github.com/users/${username}/repos?sort=updated&direction=desc&per_page=${projectCount}`,
       options
