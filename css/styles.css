@@ -277,68 +277,11 @@ body {
     }
 }
 
-/* Subtitle animation - simplified */
 .subtitle {
     font-size: clamp(1.1rem, 3vw, 1.5rem);
     font-weight: 400;
     margin-bottom: 2.5rem;
     max-width: 600px;
-    line-height: 1.7;
-}
-
-.subtitle-line {
-    display: inline-block;
-    transition: opacity 0.5s ease;
-}
-
-/* Staggered animation delays - simplified */
-.delay-1 {
-    transition-delay: 0.1s;
-}
-
-.delay-2 {
-    transition-delay: 0.2s;
-}
-
-.delay-3 {
-    transition-delay: 0.3s;
-}
-
-.delay-4 {
-    transition-delay: 0.4s;
-}
-
-.highlight {
-    color: #5e60ce;
-    position: relative;
-}
-
-.highlight:after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--primary-gradient);
-    transition: width 0.5s ease;
-    transition-delay: inherit;
-}
-
-.subtitle-line.visible .highlight:after {
-    width: 100%;
-    transition-delay: 0.3s;
-}
-
-@keyframes shine {
-    0% {
-        transform: translateX(-100%);
-        opacity: 0.4;
-    }
-    100% {
-        transform: translateX(100%);
-        opacity: 0;
-    }
 }
 
 .cta-btn {
@@ -1603,6 +1546,23 @@ footer {
 .fade-in.visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Staggered animation delays */
+.delay-1 {
+    transition-delay: 0.1s;
+}
+
+.delay-2 {
+    transition-delay: 0.2s;
+}
+
+.delay-3 {
+    transition-delay: 0.3s;
+}
+
+.delay-4 {
+    transition-delay: 0.4s;
 }
 
 /* Responsive design with modern breakpoints */
