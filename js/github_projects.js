@@ -18,9 +18,16 @@ async function fetchGitHubProjects() {
     };
     
     // Check if we have an API token in local config
-    if (window.githubConfig && window.githubConfig.apiToken && window.githubConfig.apiToken.length > 5) {
-      options.headers.Authorization = `token ${window.githubConfig.apiToken}`;
-      console.log("Using GitHub API token");
+    if (window.githubConfig && window.githubConfig.apiToken) {
+      // Format the token correctly
+      let token = window.githubConfig.apiToken;
+      if (token.startsWith('github_pat_')) {
+        // For fine-grained token support
+        options.headers.Authorization = `Bearer ${token}`;
+      } else {
+        // For classic tokens
+        options.headers.Authorization = `token ${token}`;
+      }
     } else {
       console.log("No GitHub API token provided, using unauthenticated requests");
     }
@@ -61,6 +68,9 @@ async function fetchGitHubProjects() {
         
         // Update stats with real values from API
         updateStatCounters(totalProjects, totalStars, languageCount);
+        
+        // Create languages display section
+        createLanguagesSection(Array.from(languages), username, options);
         
         // Load project cards
         await loadProjectCards(username, projectCount, options);
@@ -242,6 +252,130 @@ function loadDefaultProjectCards(username) {
   document.querySelectorAll(".fade-in").forEach((el) => {
     el.classList.add("visible");
   });
+}
+
+// Function to create a languages section
+async function createLanguagesSection(languages, username, options) {
+  try {
+    // Find or create the languages container
+    let languagesContainer = document.getElementById('languages-container');
+    
+    // If container doesn't exist, create it after the skills section
+    if (!languagesContainer) {
+      const skillsSection = document.querySelector('#skills .skills-container');
+      if (skillsSection) {
+        languagesContainer = document.createElement('div');
+        languagesContainer.id = 'languages-container';
+        languagesContainer.className = 'languages-container fade-in';
+        languagesContainer.style.marginTop = '40px';
+        
+        const heading = document.createElement('h3');
+        heading.textContent = 'Programming Languages I Use';
+        heading.style.textAlign = 'center';
+        heading.style.marginBottom = '25px';
+        
+        languagesContainer.appendChild(heading);
+        
+        const langItems = document.createElement('div');
+        langItems.className = 'language-items';
+        langItems.style.display = 'flex';
+        langItems.style.flexWrap = 'wrap';
+        langItems.style.justifyContent = 'center';
+        langItems.style.gap = '15px';
+        
+        languagesContainer.appendChild(langItems);
+        
+        skillsSection.parentNode.insertBefore(languagesContainer, skillsSection.nextSibling);
+      }
+    }
+    
+    const langItems = languagesContainer.querySelector('.language-items');
+    if (!langItems) return;
+    
+    // Clear existing languages
+    langItems.innerHTML = '';
+    
+    // Map of languages to their corresponding icons and colors
+    const languageIcons = {
+      JavaScript: { icon: 'fab fa-js', color: '#f7df1e' },
+      TypeScript: { icon: 'fab fa-js', color: '#007acc' },
+      HTML: { icon: 'fab fa-html5', color: '#e34c26' },
+      CSS: { icon: 'fab fa-css3-alt', color: '#264de4' },
+      Python: { icon: 'fab fa-python', color: '#3776ab' },
+      Java: { icon: 'fab fa-java', color: '#007396' },
+      PHP: { icon: 'fab fa-php', color: '#777bb4' },
+      Ruby: { icon: 'fas fa-gem', color: '#cc342d' },
+      Go: { icon: 'fab fa-golang', color: '#00add8' },
+      Swift: { icon: 'fab fa-swift', color: '#ffac45' },
+      Kotlin: { icon: 'fab fa-android', color: '#7f52ff' },
+      "C#": { icon: 'fab fa-microsoft', color: '#178600' },
+      "C++": { icon: 'fas fa-code', color: '#f34b7d' },
+      C: { icon: 'fas fa-code', color: '#555555' },
+      Rust: { icon: 'fas fa-gears', color: '#dea584' },
+      Shell: { icon: 'fas fa-terminal', color: '#89e051' },
+      PowerShell: { icon: 'fas fa-terminal', color: '#012456' },
+      Dockerfile: { icon: 'fab fa-docker', color: '#0db7ed' },
+      Vue: { icon: 'fab fa-vuejs', color: '#4fc08d' },
+      React: { icon: 'fab fa-react', color: '#61dafb' },
+      Angular: { icon: 'fab fa-angular', color: '#dd0031' }
+    };
+    
+    // For each language, get more details and create an element
+    for (const language of languages) {
+      // Create language item
+      const langItem = document.createElement('div');
+      langItem.className = 'language-item';
+      langItem.style.display = 'flex';
+      langItem.style.flexDirection = 'column';
+      langItem.style.alignItems = 'center';
+      langItem.style.padding = '15px';
+      langItem.style.background = 'rgba(255, 255, 255, 0.05)';
+      langItem.style.borderRadius = '10px';
+      langItem.style.minWidth = '120px';
+      langItem.style.transition = 'all 0.3s ease';
+      
+      // On hover effects
+      langItem.onmouseover = function() {
+        this.style.transform = 'translateY(-5px)';
+        this.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.2)';
+        this.style.background = 'rgba(58, 134, 255, 0.1)';
+      };
+      
+      langItem.onmouseout = function() {
+        this.style.transform = 'translateY(0)';
+        this.style.boxShadow = 'none';
+        this.style.background = 'rgba(255, 255, 255, 0.05)';
+      };
+      
+      // Get icon and color info
+      const iconInfo = languageIcons[language] || { icon: 'fas fa-code', color: '#3a86ff' };
+      
+      // Create icon
+      const icon = document.createElement('i');
+      icon.className = iconInfo.icon;
+      icon.style.fontSize = '2.5rem';
+      icon.style.marginBottom = '10px';
+      icon.style.color = iconInfo.color;
+      
+      // Create language name
+      const name = document.createElement('span');
+      name.textContent = language;
+      name.style.color = '#d1d1d1';
+      
+      // Add elements to item
+      langItem.appendChild(icon);
+      langItem.appendChild(name);
+      
+      // Add item to container
+      langItems.appendChild(langItem);
+    }
+    
+    // Make sure the container is visible
+    languagesContainer.classList.add('visible');
+    
+  } catch (error) {
+    console.error('Error creating languages section:', error);
+  }
 }
 
 // Call the function when the page loads
