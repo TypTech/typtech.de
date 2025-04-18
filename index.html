@@ -49,8 +49,14 @@
         <div class="container">
             <div class="hero-content">
                 <h1 class="title title-decoding" id="matrix-title">TypTech</h1>
-                <p class="subtitle fade-in delay-1">-- Technology Inspires --</p>
-                <a href="#projects" class="cta-btn fade-in delay-2">Explore My Work <i
+                <p class="subtitle">
+                    <span class="subtitle-line" id="line1" style="opacity: 0;">-- Technology Inspires --</span><br>
+                    <br>
+                    <span class="subtitle-line" id="line2" style="opacity: 0;">Place of <span style="color: #5e60ce;">Inspiration</span></span><br>
+                    <span class="subtitle-line" id="line3" style="opacity: 0;">Place of <span style="color: #5e60ce;">Innovation</span></span><br>
+                    <span class="subtitle-line" id="line4" style="opacity: 0;">Place of <span style="color: #5e60ce;">Creation</span></span><br>
+                </p>
+                <a href="#projects" class="cta-btn fade-in delay-1">Explore My Work <i
                         class="fas fa-arrow-right"></i></a>
             </div>
         </div>
@@ -378,109 +384,134 @@
     </div>
     <!-- JavaScript -->
     <script>
-        // Matrix text decoder effect
+        // Enhanced Matrix text decoder effect
         document.addEventListener('DOMContentLoaded', () => {
+            // Title animation
             const title = document.getElementById('matrix-title');
+            if (!title) return; // Safety check
+            
             const finalText = title.textContent;
             const titleLength = finalText.length;
             
             // Clear original text and prepare for animation
             title.innerHTML = '';
             
-            // Create spans for each character
+            // Create spans for each character with fancy setup
             for (let i = 0; i < titleLength; i++) {
                 const span = document.createElement('span');
                 span.textContent = getRandomChar();
+                span.style.opacity = '0';
+                span.style.transform = 'translateY(-20px)';
                 title.appendChild(span);
             }
             
             const spans = title.querySelectorAll('span');
             
-            // Faster animation for 2-3 second total time
-            startFastMatrixAnimation();
-            
-            // Function for faster matrix animation
-            function startFastMatrixAnimation() {
-                // Add initial decoding effect to all characters
-                spans.forEach(span => span.classList.add('decoding'));
-                
-                // Shuffle all characters rapidly a few times
-                shuffleAllFast(3);
-                
-                // Rapidly decode each character
+            // Initial appearance with staggered timing
+            spans.forEach((span, index) => {
                 setTimeout(() => {
-                    // Faster sequential decoding
+                    span.style.opacity = '1';
+                    span.style.transform = 'translateY(0)';
+                    span.classList.add('decoding');
+                }, index * 80);
+            });
+            
+            // Enhanced matrix animation
+            enhancedMatrixAnimation();
+            
+            // Function for enhanced matrix animation
+            function enhancedMatrixAnimation() {
+                // Multiple layers of randomization for a more dramatic effect
+                shuffleWithEffect(4);
+                
+                // More dramatic sequential reveal
+                setTimeout(() => {
                     for (let i = 0; i < titleLength; i++) {
                         setTimeout(() => {
-                            // Reveal the actual character
-                            spans[i].textContent = finalText[i];
-                            spans[i].classList.remove('decoding');
-                            spans[i].classList.add('decoded');
-                        }, i * 150); // 150ms per character = ~1s for full word
+                            // Transition through 3 random characters before settling
+                            const transitionChars = 3;
+                            for (let j = 0; j <= transitionChars; j++) {
+                                setTimeout(() => {
+                                    if (j === transitionChars) {
+                                        // Final character
+                                        spans[i].textContent = finalText[i];
+                                        spans[i].classList.remove('decoding');
+                                        spans[i].classList.add('decoded');
+                                    } else {
+                                        // Transition character
+                                        spans[i].textContent = getRandomChar();
+                                    }
+                                }, j * 60);
+                            }
+                        }, i * 120);
                     }
-                }, 600); // Start decoding after initial shuffle
-                
-                // Make sure final state shows full word
-                setTimeout(() => {
-                    // Ensure all characters are properly revealed
-                    for (let i = 0; i < titleLength; i++) {
-                        spans[i].textContent = finalText[i];
-                        spans[i].classList.remove('decoding');
-                        spans[i].classList.add('decoded');
-                    }
-                }, 2500); // Force completion after 2.5s
+                    
+                    // Start subtitle animations after title animation completes
+                    setTimeout(animateSubtitleSequentially, 1500);
+                }, 800);
             }
             
-            // Faster shuffle for all characters
-            function shuffleAllFast(times) {
+            // Simple sequential subtitle animation
+            function animateSubtitleSequentially() {
+                const line1 = document.getElementById('line1');
+                const line2 = document.getElementById('line2');
+                const line3 = document.getElementById('line3');
+                const line4 = document.getElementById('line4');
+                
+                // First line
+                setTimeout(() => {
+                    line1.style.transition = 'opacity 0.5s ease';
+                    line1.style.opacity = '1';
+                    
+                    // Second line after 1 second
+                    setTimeout(() => {
+                        line2.style.transition = 'opacity 0.5s ease';
+                        line2.style.opacity = '1';
+                        
+                        // Third line after 1 second
+                        setTimeout(() => {
+                            line3.style.transition = 'opacity 0.5s ease';
+                            line3.style.opacity = '1';
+                            
+                            // Fourth line after 1 second
+                            setTimeout(() => {
+                                line4.style.transition = 'opacity 0.5s ease';
+                                line4.style.opacity = '1';
+                            }, 1000);
+                        }, 1000);
+                    }, 1000);
+                }, 0);
+            }
+            
+            // Enhanced shuffle with visual effects
+            function shuffleWithEffect(times) {
                 let count = 0;
                 
                 const shuffleInterval = setInterval(() => {
-                    // Shuffle all characters
-                    spans.forEach(span => {
-                        span.textContent = getRandomChar();
+                    // Randomize characters with varying intensity
+                    spans.forEach((span, index) => {
+                        // More randomization at the start, more stability towards the end
+                        const randomFactor = 1 - (count / times);
+                        if (Math.random() < randomFactor) {
+                            span.textContent = getRandomChar();
+                            // Add subtle scaling effect during shuffle
+                            span.style.transform = `scale(${1 + Math.random() * 0.2})`;
+                            setTimeout(() => {
+                                span.style.transform = 'scale(1)';
+                            }, 100);
+                        }
                     });
                     
                     count++;
                     if (count >= times) {
                         clearInterval(shuffleInterval);
                     }
-                }, 150); // Faster shuffle interval
+                }, 150);
             }
             
-            // Reset and replay animation when scrolling back into view
-            const titleObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting && !title.classList.contains('animating')) {
-                        resetMatrixAnimation();
-                    }
-                });
-            }, { threshold: 0.5 });
-            
-            titleObserver.observe(title);
-            
-            // Function to reset and replay the animation
-            function resetMatrixAnimation() {
-                title.classList.add('animating');
-                
-                // Reset all characters to random
-                spans.forEach(span => {
-                    span.textContent = getRandomChar();
-                    span.classList.remove('decoded', 'decoding');
-                });
-                
-                // Restart the faster animation
-                startFastMatrixAnimation();
-                
-                // Remove animating class after animation completes
-                setTimeout(() => {
-                    title.classList.remove('animating');
-                }, 2800);
-            }
-            
-            // Helper function to get random character
+            // Get better random characters with more variety
             function getRandomChar() {
-                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()";
+                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(){}[]<>+=";
                 return chars.charAt(Math.floor(Math.random() * chars.length));
             }
         });
@@ -515,7 +546,7 @@
         });
 
         // Scroll animation
-        const fadeElements = document.querySelectorAll('.fade-in');
+        const fadeElements = document.querySelectorAll('.fade-in:not(.subtitle-line)');
 
         const fadeInObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
